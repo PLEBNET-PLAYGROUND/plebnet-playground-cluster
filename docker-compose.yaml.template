@@ -1,25 +1,12 @@
 version: "3"
 networks: {}
 services:
-  bitcoind:
+  bitcoind_n:
     build:
       context: ./bitcoin-signet
       dockerfile: Dockerfile
       args:
         - ARCH=${ARCH}
-    image: playground-bitcoind
-  tor:
-    build:
-      context: ./tor
-      dockerfile: Dockerfile
-    image: playground-tor
-  lnd:
-    build: 
-      context: ./lnd-signet
-      dockerfile: Dockerfile
-    image: playground-lnd
-  bitcoind_n:
-    image: playground-bitcoind
     links:
     - tor-${n}
     depends_on: 
@@ -34,10 +21,12 @@ services:
     - "38334" 
     volumes:
       - type: bind
-        source: ${oc.env:PWD}/volumes/bitcoin_datadir
+        source: ${oc.env:PWD}/volumes/bitcoin_datadir_${n}
         target: /root/.bitcoin/
   lnd_n:
-    image: playground-lnd
+    build: 
+      context: ./lnd-signet
+      dockerfile: Dockerfile
     links:
     - bitcoind-${n}
     - tor-${n}
@@ -45,16 +34,16 @@ services:
     - bitcoind-${n}
     - tor-${n}
     environment:
-      - ARCH=${ARCH}
-      - LND_ALIAS: 'play-cluster-{n}'
-      - LND_LISTEN=playground-lnd:9735
-      - LND_RPCLISTEN=playground-lnd:10009
-      - LND_RESTLISTEN=playground-lnd:8080
-      - zmqpubrawblock=tcp://playground-bitcoind:28332
-      - zmqpubrawtx=tcp://playground-bitcoind:28333
-      - torsocks=playground-tor:9050
-      - torcontrol=playground-tor:9051
-      - tlsextradomain: 'playground-lnd-{n}'
+      ARCH: '${ARCH}'
+      LND_ALIAS: 'play-cluster-${n}'
+      LND_LISTEN: 'playground-lnd-${n}:9735'
+      LND_RPCLISTEN: 'playground-lnd-${n}:10009'
+      LND_RESTLISTEN: 'playground-lnd-${n}:8080'
+      zmqpubrawblock: 'tcp://playground-bitcoind:28332'
+      zmqpubrawtx: 'tcp://playground-bitcoind:28333'
+      torsocks: 'playground-tor-${n}:9050'
+      torcontrol: 'playground-tor-${n}:9051'
+      tlsextradomain: 'playground-lnd-${n}'
     restart: unless-stopped
     container_name: playground-lnd-${n}
     expose:
@@ -68,6 +57,9 @@ services:
         target: /root/.lnd/
   tor_n:
       restart: unless-stopped
+      build:
+        context: ./tor
+        dockerfile: Dockerfile
       container_name: playground-tor-${n}
       expose:
       - 9050
