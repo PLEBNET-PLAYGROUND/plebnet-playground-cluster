@@ -4,14 +4,22 @@ python plebnet_generate.py ARCH=x86_64-linux-gnu bitcoind_n=1 lnd_n=1 tor_n=1
 
 #Remove
 docker-compose down 
+sudo rm -rf volumes
+
 declare n=0
 #Create Datafile
-sudo rm -rf volumes
+
 mkdir volumes
-mkdir volumes/lnd_datadir_$n
-mkdir volumes/bitcoin_datadir_$n
-mkdir volumes/tor_datadir_$n
-mkdir volumes/tor_servicesdir_$n
-mkdir volumes/tor_torrcdir_$n
+declare n=1
+for (( i=0; i<=n-1; i++ ))
+do
+    mkdir volumes/lnd_datadir_$i
+    mkdir volumes/bitcoin_datadir_$i
+    mkdir volumes/tor_datadir_$i
+    mkdir volumes/tor_servicesdir_$i
+    mkdir volumes/tor_torrcdir_$i
+done
 docker-compose build --build-arg ARCH=$ARCH
 docker-compose up -d
+
+ 
