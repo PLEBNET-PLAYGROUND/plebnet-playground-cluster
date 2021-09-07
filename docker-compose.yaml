@@ -31,6 +31,7 @@ services:
       - bitcoind-1
       - tor-1
     environment:
+      LND_ALIAS: 'play-cluster-0001'
       LND_LISTEN: 'playground-lnd-1:9735'
       LND_RPCLISTEN: 'playground-lnd-1:10009'
       LND_RESTLISTEN: 'playground-lnd-1:8080'
@@ -38,6 +39,7 @@ services:
       zmqpubrawtx: 'tcp://playground-bitcoind-1:28333'
       torsocks: 'playground-tor-1:9050'
       torcontrol: 'playground-tor-1:9051'
+      tlsextradomain: 'playground-lnd-1'
     restart: unless-stopped
     container_name: playground-lnd-1
     build: 

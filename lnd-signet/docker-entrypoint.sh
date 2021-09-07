@@ -4,7 +4,6 @@ set -eo pipefail
 initial_lnd_file()
 {
   echo "
-    [Application Options]
     listen=${LND_LISTEN}
     rpclisten=${LND_RPCLISTEN}
     rpclisten=127.0.0.1:10009
@@ -16,34 +15,38 @@ initial_lnd_file()
     accept-amp=true
     allow-circular-route=true
     numgraphsyncpeers=3
-    [Bitcoin]
+    alias=${LND_ALIAS}
+    tlsextradomain=${tlsextradomain}
     bitcoin.active=true
     bitcoin.mainnet=false
     bitcoin.signet=true
     bitcoin.signetseednode=104.131.10.218
     bitcoin.node=bitcoind
     bitcoin.dnsseed=0
-    [Bitcoind]
     bitcoind.dir=/var/lib/bitcoind/
     bitcoind.rpchost=playground-bitcoind
     bitcoind.rpcuser=bitcoin
     bitcoind.rpcpass=bitcoin
     bitcoind.zmqpubrawblock=${zmqpubrawblock}
     bitcoind.zmqpubrawtx=${zmqpubrawtx}
-    [tor]
     tor.active=true
     tor.socks=${torsocks}
     tor.control=${torcontrol}
     tor.password=hello
     tor.v3=true
-    [protocol]
     protocol.wumbo-channels=true
     " >> /root/.lnd/lnd.conf
+}
+
+add_unlock_to_conf()
+{
+  echo "wallet-unlock-password-file=/root/.lnd/unlock.password" >> /root/.lnd/lnd.conf
 }
 
 if [[ ! -f /root/.lnd/lnd.conf ]]; then
   echo "lnd.conf file not found in volume, building."
   initial_lnd_file
+  /usr/local/etc/docker-initwalletcreate.sh &
 else
   echo "lnd.conf file exists, skipping."
 fi
