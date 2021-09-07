@@ -1,0 +1,86 @@
+version: "3"
+networks: {}
+services:
+  bitcoind:
+    build:
+      context: ./bitcoin-signet
+      dockerfile: Dockerfile
+      args:
+        - ARCH=${ARCH}
+    image: playground-bitcoind
+  tor:
+    build:
+      context: ./tor
+      dockerfile: Dockerfile
+    image: playground-tor
+  lnd:
+    build: 
+      context: ./lnd-signet
+      dockerfile: Dockerfile
+    image: playground-lnd
+  bitcoind_n:
+    image: playground-bitcoind
+    links:
+    - tor-${n}
+    depends_on: 
+    - tor-${n}
+    restart: unless-stopped
+    container_name: playground-bitcoind-${n}
+    environment:
+      - ARCH=${ARCH}
+    expose:
+    - "38332"
+    - "38333"
+    - "38334"
+    # ports:
+    # - "38333:38333"
+    volumes:
+      - type: bind
+        source: ${oc.env:PWD}/volumes/bitcoin_datadir
+        target: /root/.bitcoin/
+  lnd_n:
+    image: playground-lnd
+    links:
+    - bitcoind-${n}
+    - tor-${n}
+    depends_on: 
+    - bitcoind-${n}
+    - tor-${n}
+    environment:
+      - ARCH=${ARCH}
+      - LND_LISTEN=playground-lnd:9735
+      - LND_RPCLISTEN=playground-lnd:10009
+      - LND_RESTLISTEN=playground-lnd:8080
+      - zmqpubrawblock=tcp://playground-bitcoind:28332
+      - zmqpubrawtx=tcp://playground-bitcoind:28333
+      - torsocks=playground-tor:9050
+      - torcontrol=playground-tor:9051
+    restart: unless-stopped
+    container_name: playground-lnd-${n}
+    expose:
+    - 8080
+    - 9735
+    - 9911
+    - 10009
+    volumes:
+      - type: bind
+        source: ${oc.env:PWD}/volumes/lnd_datadir_${n}
+        target: /root/.lnd/
+
+  tor_n:
+      restart: unless-stopped
+      container_name: playground-tor-${n}
+      expose:
+      - 9050
+      - 9051
+      volumes:
+        - type: bind
+          source: ${oc.env:PWD}/volumes/tor_datadir_${n}
+          target: /home/tor/.tor
+        - type: bind
+          source: ${oc.env:PWD}/volumes/tor_torrcdir_${n}
+          target: /usr/local/etc/tor
+        - type: bind
+          source: ${oc.env:PWD}/volumes/tor_servicesdir_${n}
+          target: /var/lib/tor/hidden_services
+
