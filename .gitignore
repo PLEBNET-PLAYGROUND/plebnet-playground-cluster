@@ -362,3 +362,5 @@ hourly-outputs/
 
 volumes/
 
+docker-compose.yaml
+
