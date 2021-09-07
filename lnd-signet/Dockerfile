@@ -50,7 +50,6 @@ COPY --from=builder /go/src/github.com/lightningnetwork/lnd/scripts/verify-insta
 # verification.
 RUN sha256sum /bin/lnd /bin/lncli > /shasums.txt
 
-COPY lnd.conf /usr/local/etc/lnd.conf
 COPY docker-entrypoint.sh /usr/local/etc/entrypoint.sh
 
 ENTRYPOINT ["/usr/local/etc/entrypoint.sh"]

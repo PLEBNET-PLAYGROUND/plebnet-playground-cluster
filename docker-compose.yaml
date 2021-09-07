@@ -1,13 +1,13 @@
 version: "3"
 networks: {}
 services:
-  bitcoind:
+  bitcoind-1:
     links:
-    - tor-{n}
+    - tor-1
     depends_on: 
-    - tor-{n}
+    - tor-1
     restart: unless-stopped
-    container_name: playground-bitcoind-{n}
+    container_name: playground-bitcoind-1
     environment:
       - ARCH=${ARCH}
     build: 
@@ -19,30 +19,27 @@ services:
     - "38332"
     - "38333"
     - "38334"
-    ports:
-    - "38333:38333"
     volumes:
       - type: bind
-        source: ${PWD}/volumes/bitcoin_datadir
+        source: ${PWD}/volumes/bitcoin_datadir-1
         target: /root/.bitcoin/
-  lnd:
+  lnd-1:
     links:
-    - bitcoind-{n}
-    - tor-{n}
+      - bitcoind-1
+      - tor-1
     depends_on: 
-    - bitcoind-{n}
-    - tor-{n}
-     environment:
-      - ARCH=${ARCH}
-      - LND_LISTEN=playground-lnd:9735
-      - LND_RPCLISTEN=playground-lnd:10009
-      - LND_RESTLISTEN=playground-lnd:8080
-      - zmqpubrawblock=tcp://playground-bitcoind:28332
-      - zmqpubrawtx=tcp://playground-bitcoind:28333
-      - torsocks=playground-tor:9050
-      - torcontrol=playground-tor:9051
+      - bitcoind-1
+      - tor-1
+    environment:
+      LND_LISTEN: 'playground-lnd-1:9735'
+      LND_RPCLISTEN: 'playground-lnd-1:10009'
+      LND_RESTLISTEN: 'playground-lnd-1:8080'
+      zmqpubrawblock: 'tcp://playground-bitcoind-1:28332'
+      zmqpubrawtx: 'tcp://playground-bitcoind-1:28333'
+      torsocks: 'playground-tor-1:9050'
+      torcontrol: 'playground-tor-1:9051'
     restart: unless-stopped
-    container_name: playground-lnd-{n}
+    container_name: playground-lnd-1
     build: 
       context: ./lnd-signet
       dockerfile: Dockerfile
@@ -53,11 +50,11 @@ services:
     - 10009
     volumes:
       - type: bind
-        source: ${PWD}/volumes/lnd_datadir_{n}
+        source: ${PWD}/volumes/lnd_datadir-1
         target: /root/.lnd/
-  tor:
+  tor-1:
       restart: unless-stopped
-      container_name: playground-tor-{n}
+      container_name: playground-tor-1
       build:
         context: ./tor
         dockerfile: Dockerfile
@@ -66,11 +63,11 @@ services:
       - 9051
       volumes:
         - type: bind
-          source: ${PWD}/volumes/tor_datadir_{n}
+          source: ${PWD}/volumes/tor_datadir-1
           target: /home/tor/.tor
         - type: bind
-          source: ${PWD}/volumes/tor_torrcdir_{n}
+          source: ${PWD}/volumes/tor_torrcdir-1
           target: /usr/local/etc/tor
         - type: bind
-          source: ${PWD}/volumes/tor_servicesdir_{n}
+          source: ${PWD}/volumes/tor_servicesdir-1
           target: /var/lib/tor/hidden_services  
