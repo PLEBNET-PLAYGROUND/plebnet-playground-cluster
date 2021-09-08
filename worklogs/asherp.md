@@ -1,3 +1,5 @@
+### 2021-09-07 18:53:34.838458: clock-out
+
 * isolated nodes, generic up script
 
 ### 2021-09-07 17:40:52.515429: clock-in
