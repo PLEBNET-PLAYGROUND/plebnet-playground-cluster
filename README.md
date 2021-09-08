@@ -20,7 +20,8 @@ If you're looking to just run a client node with GUI please visit [Plebnet Playg
 - [Direct Donation to Xenonfun](https://btcpay.xenon.fun/apps/41Cvr8bo3LgG42kmNyyDccvMzK2U/crowdfund)
 ## Notes
 ***
-- TBD
+- Still pretty rough, but will automatically make wallet and unlock, seeds are in ```seeds.txt``` the password is ```12345678``` for all wallets.
+- Next step is building some scripts to fill up the nodes with some Playground tBTC, establish channels, and define automatic behavior  
 ### Thanks to the contributors to this project development & testing
 - [Richard Safier](https://github.com/rsafier)
 - [@asherp](https://github.com/asherp) 
