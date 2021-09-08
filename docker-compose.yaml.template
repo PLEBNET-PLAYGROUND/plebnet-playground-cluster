@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
       args:
         - ARCH=${ARCH}
-    image: playground-bitcoind
+    image: playground-cluster-bitcoind
     links:
     - tor-${n}
     depends_on: 
@@ -28,7 +28,7 @@ services:
     build: 
       context: ./lnd-signet
       dockerfile: Dockerfile
-    image: playground-lnd
+    image: playground-cluster-lnd
     links:
     - bitcoind-${n}
     - tor-${n}
@@ -63,7 +63,7 @@ services:
       build:
         context: ./tor
         dockerfile: Dockerfile
-      image: playground-tor
+      image: playground-cluster-tor
       container_name: playground-tor-${n}
       expose:
       - 9050
