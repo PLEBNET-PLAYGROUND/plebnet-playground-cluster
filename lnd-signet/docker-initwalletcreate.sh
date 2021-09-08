@@ -1,17 +1,27 @@
+add_unlock_to_conf()
+{
+  echo "wallet-unlock-password-file=/root/.lnd/unlock.password" >> /root/.lnd/lnd.conf
+}
+
 echo "[lnd_unlock] Waiting 2 seconds for lnd..."
 sleep 2
 
 echo "waiting for wallet create phase"
 while
-    if grep -xq 'lncli create' /root/.lnd/logs/bitcoin/signet/lnd.log
+    if grep -q 'lncli create' /root/.lnd/logs/bitcoin/signet/lnd.log;
     then
-    echo "ready to create...."
+        echo "ready to create...."
+        #Need to run the python gRPC HERE
         break;
     else
         sleep 2;
+        echo "waiting to create."
     fi
 do true; done
 
+#once we get here we will want to change lnd.conf with wallet-unlock-file stuff
+
+#this is likely not needed anymore
 # ensure that lnd is up and running before proceeding
 while
     CA_CERT="/root/.lnd/data/tls.cert"
@@ -31,5 +41,4 @@ while
         sleep 2
     fi
 do true; done
-
-echo "We should make the wallet here!"
+ 
