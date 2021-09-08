@@ -1,3 +1,4 @@
+* modified for independent servce type counts
 * allow setting number of nodes for bitcoind, tor, and lnd independently
 
 ### 2021-09-08 15:20:06.271499: clock-in
