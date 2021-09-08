@@ -24,7 +24,7 @@ initial_lnd_file()
     bitcoin.node=bitcoind
     bitcoin.dnsseed=0
     bitcoind.dir=/var/lib/bitcoind/
-    bitcoind.rpchost=playground-bitcoind
+    bitcoind.rpchost=${rpchost}
     bitcoind.rpcuser=bitcoin
     bitcoind.rpcpass=bitcoin
     bitcoind.zmqpubrawblock=${zmqpubrawblock}

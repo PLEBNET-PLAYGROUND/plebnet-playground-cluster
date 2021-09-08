@@ -41,11 +41,12 @@ services:
       LND_LISTEN: 'playground-lnd-${n}:9735'
       LND_RPCLISTEN: 'playground-lnd-${n}:10009'
       LND_RESTLISTEN: 'playground-lnd-${n}:8080'
-      zmqpubrawblock: 'tcp://playground-bitcoind:28332'
-      zmqpubrawtx: 'tcp://playground-bitcoind:28333'
+      zmqpubrawblock: 'tcp://playground-bitcoind-${n}:28332'
+      zmqpubrawtx: 'tcp://playground-bitcoind-${n}:28333'
       torsocks: 'playground-tor-${n}:9050'
       torcontrol: 'playground-tor-${n}:9051'
       tlsextradomain: 'playground-lnd-${n}'
+      rpchost: 'playground-bitcoind-${n}'
     restart: unless-stopped
     container_name: playground-lnd-${n}
     expose:
