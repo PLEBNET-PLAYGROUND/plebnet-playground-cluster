@@ -1,3 +1,4 @@
+* usage and clarification on node linkage
 * modified for independent servce type counts
 * allow setting number of nodes for bitcoind, tor, and lnd independently
 
