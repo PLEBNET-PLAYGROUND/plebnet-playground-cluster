@@ -6,7 +6,7 @@ fi
 
 #This is for internal testing only
 declare ARCH=x86_64-linux-gnu
-python plebnet_generate.py ARCH=x86_64-linux-gnu nodes=$1 nodes=$1 nodes=$1
+python plebnet_generate.py ARCH=x86_64-linux-gnu bitcoind=$1 lnd=$1 tor=$1
 
 #Remove
 docker-compose down 

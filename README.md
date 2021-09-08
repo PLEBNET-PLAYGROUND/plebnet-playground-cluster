@@ -8,10 +8,16 @@ On linux:
 nodes=1 ./up-x64.sh
 ```
 
-On mac:
+The `up-generic.sh` allows these to be set indpendently:
+
 ```console
-ARCH=aarch64-linux-gnu nodes=1 ./up-generic.sh
+ARCH=aarch64-linux-gnu bitcoind=1 lnd=1 tor=1 ./up-generic.sh
 ```
+
+These services are linked in a round-robin fashion:
+
+* `bitcoind-i` is linked to `tor-{i%tor_nodes}` for i in ``bitcoind_nodes`
+* `lnd-j` is linked to `bitcoind-{j%bitcoind_nodes}` and `tor-{j%tor_nodes}` for `j` in `lnd_nodes`
 
 If you're looking to just run a client node with GUI please visit [Plebnet Playground Docker](https://github.com/PLEBNET-PLAYGROUND/plebnet-playground-docker)
 ## Donate to Project

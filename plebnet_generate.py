@@ -12,15 +12,6 @@ architectures = {
         'ARM64 linux': 'aarch64-linux-gnu',
 }
 
-def get_service(service_base, node_value, service_template, arch_value):
-    result = OmegaConf.merge(
-        OmegaConf.create({'n': node_value, 'ARCH': arch_value}),
-        service_template)
-    OmegaConf.resolve(result)
-    result.pop('n')
-    result.pop('ARCH')
-    return result
-
 from omegaconf import OmegaConf
 
 cli_args = OmegaConf.from_cli()
@@ -33,20 +24,14 @@ except KeyError:
         print('\t{}: ARCH={}'.format(k, v))
     sys.exit()
 
-try:
-    nodes = int(cli_args['nodes'])
-except KeyError:
-    print('Need to supply number of nodes: nodes=')
-    sys.exit()
+node_counts = dict()
 
-# node_numbers = dict()
-
-# for _ in 'bitcoind_n', 'lnd_n', 'tor_n':
-#     try:
-#         node_numbers[_] = getattr(cli_args, _)
-#     except:
-#         print('Need to supply {}='.format(_))
-#         sys.exit()
+for _ in 'bitcoind', 'lnd', 'tor':
+    try:
+        node_counts[_] = getattr(cli_args, _)
+    except:
+        print('Need to supply {}='.format(_))
+        sys.exit()
 
 conf = OmegaConf.load('docker-compose.yaml.template')
 
@@ -55,20 +40,38 @@ conf = OmegaConf.merge(OmegaConf.create(dict(ARCH=arch)), conf)
 
 print('creating config for nodes:')
 
+def get_service(service_values, service_template):
+    """merge values into template"""
+    result = OmegaConf.merge(
+        service_values,
+        service_template)
+    OmegaConf.resolve(result)
+    for key in service_values:
+        result.pop(key)
+    return result
 
-for service_base in list(conf.services):
-    print(service_base, nodes)
-    for i in range(nodes):
-        service_name = '{}-{}'.format(service_base, str(i))
+def get_service_values(i, node_counts, **kwargs):
+    """Get service values using the modulus of service counts"""
+    service_values = dict()
+    for service, nodes in node_counts.items():
+        service_values[service + '_i'] = i%node_counts[service]
+    for k,v in kwargs.items():
+        service_values[k] = v
+    return OmegaConf.create(service_values)
+
+for service in list(conf.services):
+    service_nodes = node_counts[service]
+    print(service, service_nodes)
+    for i in range(service_nodes):
+        service_values = get_service_values(i, node_counts, ARCH=arch)
+        service_name = '{}-{}'.format(service, str(i))
         conf.services[service_name] = get_service(
-            service_base,
-            i,
-            conf.services[service_base],
-            arch)
+            service_values,
+            conf.services[service])
         # remove build for additional nodes
         if i > 0:
             conf.services[service_name].pop('build')
-    conf.services.pop(service_base)
+    conf.services.pop(service)
 try:
     OmegaConf.resolve(conf)
 except:
