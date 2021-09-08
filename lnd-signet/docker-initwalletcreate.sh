@@ -1,5 +1,6 @@
 add_unlock_to_conf()
 {
+  echo "12345678" > /root/.lnd/unlock.password
   echo "wallet-unlock-password-file=/root/.lnd/unlock.password" >> /root/.lnd/lnd.conf
 }
 
@@ -21,17 +22,18 @@ do true; done
 
 #once we get here we will want to change lnd.conf with wallet-unlock-file stuff
 
- MACAROON_HEADER="Grpc-Metadata-macaroon: $(xxd -ps -u -c 1000 /root/.lnd/data/chain/bitcoin/simnet/admin.macaroon)"
-   curl -X GET --cacert /root/.lnd/tls.cert https://localhost:8080/v1/genseed | jq .cipher_seed_mnemonic | tr -d '\n'| tr -d ' ' > /root/.lnd/seeds.txt
+curl -X GET --cacert /root/.lnd/tls.cert https://localhost:8080/v1/genseed | jq .cipher_seed_mnemonic | tr -d '\n'| tr -d ' ' > /root/.lnd/seeds.txt
  # { 
  #   "cipher_seed_mnemonic": <array string>, 
  #   "enciphered_seed": <byte>, 
  # }
  # cat seeds.txt | jq .cipher_seed_mnemonic | tr -d '\n'
 #password is 12345678
-curl -X POST --cacert /root/.lnd/tls.cert --header  https://localhost:8080/v1/initwallet  \
-    -d '{ "wallet_password":"MTIzNDU2NzgK","cipher_seed_mnemonic":"${cat seeds.txt}"}' 
-
+postdata='{"wallet_password":"MTIzNDU2Nzg=","cipher_seed_mnemonic":'
+postdata+=$(cat /root/.lnd/seeds.txt)
+postdata+='}'
+curl -X POST --cacert /root/.lnd/tls.cert https://localhost:8080/v1/initwallet -d $postdata
+add_unlock_to_conf
 #this is likely not needed anymore
 # ensure that lnd is up and running before proceeding
 while
