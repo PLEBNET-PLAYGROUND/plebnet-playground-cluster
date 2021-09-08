@@ -15,7 +15,6 @@ initial_lnd_file()
     accept-amp=true
     allow-circular-route=true
     numgraphsyncpeers=3
-    alias=${LND_ALIAS}
     tlsextradomain=${tlsextradomain}
     bitcoin.active=true
     bitcoin.mainnet=false

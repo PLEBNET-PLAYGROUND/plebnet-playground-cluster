@@ -37,7 +37,7 @@ services:
     - tor-${n}
     environment:
       ARCH: '${ARCH}'
-      LND_ALIAS: 'play-cluster-${n}'
+      n: '${n}'
       LND_LISTEN: 'playground-lnd-${n}:9735'
       LND_RPCLISTEN: 'playground-lnd-${n}:10009'
       LND_RESTLISTEN: 'playground-lnd-${n}:8080'
