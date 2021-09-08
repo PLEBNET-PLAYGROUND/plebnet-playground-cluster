@@ -9,11 +9,11 @@ services:
         - ARCH=${ARCH}
     image: playground-cluster-bitcoind
     links:
-    - tor-${n}
+    - tor-${tor_i}
     depends_on: 
-    - tor-${n}
+    - tor-${tor_i}
     restart: unless-stopped
-    container_name: playground-bitcoind-${n}
+    container_name: playground-bitcoind-${bitcoind_i}
     environment:
       - ARCH=${ARCH}
     expose:
@@ -22,7 +22,7 @@ services:
     - "38334" 
     volumes:
       - type: bind
-        source: ${oc.env:PWD}/volumes/bitcoin_datadir_${n}
+        source: ${oc.env:PWD}/volumes/bitcoin_datadir_${bitcoind_i}
         target: /root/.bitcoin/
   lnd:
     build: 
@@ -30,25 +30,25 @@ services:
       dockerfile: Dockerfile
     image: playground-cluster-lnd
     links:
-    - bitcoind-${n}
-    - tor-${n}
+    - bitcoind-${bitcoind_i}
+    - tor-${tor_i}
     depends_on: 
-    - bitcoind-${n}
-    - tor-${n}
+    - bitcoind-${bitcoind_i}
+    - tor-${tor_i}
     environment:
       ARCH: '${ARCH}'
-      LND_ALIAS: 'play-cluster-${n}'
-      LND_LISTEN: 'playground-lnd-${n}:9735'
-      LND_RPCLISTEN: 'playground-lnd-${n}:10009'
-      LND_RESTLISTEN: 'playground-lnd-${n}:8080'
-      zmqpubrawblock: 'tcp://playground-bitcoind-${n}:28332'
-      zmqpubrawtx: 'tcp://playground-bitcoind-${n}:28333'
-      torsocks: 'playground-tor-${n}:9050'
-      torcontrol: 'playground-tor-${n}:9051'
-      tlsextradomain: 'playground-lnd-${n}'
-      rpchost: 'playground-bitcoind-${n}'
+      LND_ALIAS: 'play-cluster-${lnd_i}'
+      LND_LISTEN: 'playground-lnd-${lnd_i}:9735'
+      LND_RPCLISTEN: 'playground-lnd-${lnd_i}:10009'
+      LND_RESTLISTEN: 'playground-lnd-${lnd_i}:8080'
+      zmqpubrawblock: 'tcp://playground-bitcoind-${bitcoind_i}:28332'
+      zmqpubrawtx: 'tcp://playground-bitcoind-${bitcoind_i}:28333'
+      torsocks: 'playground-tor-${tor_i}:9050'
+      torcontrol: 'playground-tor-${tor_i}:9051'
+      tlsextradomain: 'playground-lnd-${lnd_i}'
+      rpchost: 'playground-bitcoind-${bitcoind_i}'
     restart: unless-stopped
-    container_name: playground-lnd-${n}
+    container_name: playground-lnd-${lnd_i}
     expose:
     - 8080
     - 9735
@@ -56,7 +56,7 @@ services:
     - 10009
     volumes:
       - type: bind
-        source: ${oc.env:PWD}/volumes/lnd_datadir_${n}
+        source: ${oc.env:PWD}/volumes/lnd_datadir_${lnd_i}
         target: /root/.lnd/
   tor:
       restart: unless-stopped
@@ -64,18 +64,18 @@ services:
         context: ./tor
         dockerfile: Dockerfile
       image: playground-cluster-tor
-      container_name: playground-tor-${n}
+      container_name: playground-tor-${tor_i}
       expose:
       - 9050
       - 9051
       volumes:
         - type: bind
-          source: ${oc.env:PWD}/volumes/tor_datadir_${n}
+          source: ${oc.env:PWD}/volumes/tor_datadir_${tor_i}
           target: /home/tor/.tor
         - type: bind
-          source: ${oc.env:PWD}/volumes/tor_torrcdir_${n}
+          source: ${oc.env:PWD}/volumes/tor_torrcdir_${tor_i}
           target: /usr/local/etc/tor
         - type: bind
-          source: ${oc.env:PWD}/volumes/tor_servicesdir_${n}
+          source: ${oc.env:PWD}/volumes/tor_servicesdir_${tor_i}
           target: /var/lib/tor/hidden_services
 
