@@ -38,10 +38,7 @@ initial_lnd_file()
     " >> /root/.lnd/lnd.conf
 }
 
-add_unlock_to_conf()
-{
-  echo "wallet-unlock-password-file=/root/.lnd/unlock.password" >> /root/.lnd/lnd.conf
-}
+
 
 if [[ ! -f /root/.lnd/lnd.conf ]]; then
   echo "lnd.conf file not found in volume, building."
