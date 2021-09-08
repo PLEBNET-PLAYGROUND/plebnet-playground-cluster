@@ -1,3 +1,4 @@
+* made compatible with new plebnet_generate script
 ### 2021-09-07 18:53:34.838458: clock-out
 
 * isolated nodes, generic up script
