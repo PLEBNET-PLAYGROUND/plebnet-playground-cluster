@@ -14,12 +14,13 @@ parser = argparse.ArgumentParser(description='Script to get coins from a faucet.
 parser.add_argument('-c', '--cmd', dest='cmd', default='docker', help='bitcoin-cli command to use')
 parser.add_argument('-f', '--faucet', dest='faucet', default='http://signet.xenon.fun:5000/faucet', help='URL of the faucet')
 parser.add_argument('-a', '--address', dest='address', default='', help='Bitcoin address to which the faucet should send')
+parser.add_argument('-n', '--node', dest='node', default='', help='Node')
 
 args = parser.parse_args()
 
 if args.address == '': 
     # get address for receiving coins
-    args.address = json.loads(subprocess.check_output([args.cmd] + ['exec','-it','playground-lnd', 'lncli', '--macaroonpath', '/root/.lnd/data/chain/bitcoin/signet/admin.macaroon', 'newaddress', 'p2wkh']))["address"]
+    args.address = json.loads(subprocess.check_output([args.cmd] + ['exec','-it', args.node , 'lncli', '--macaroonpath', '/root/.lnd/data/chain/bitcoin/signet/admin.macaroon', 'newaddress', 'p2wkh']))["address"]
 
     data = {'address': args.address}
 try:
