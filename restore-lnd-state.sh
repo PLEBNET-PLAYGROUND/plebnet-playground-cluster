@@ -3,8 +3,7 @@ dirs=$(ls -d backup/*)
 for f in $dirs
 do
     num=$(echo $f | tr -d 'backup/')
-    echo $num
-    
+    echo $num 
     sudo cp -v ./backup/${num}/config/* ./volumes/lnd_datadir_${num}/
     sudo cp -v ./backup/${num}/chain/* ./volumes/lnd_datadir_${num}/data/chain/bitcoin/signet/
     sudo cp -v ./backup/${num}/graph/* ./volumes/lnd_datadir_${num}/data/graph/signet/
