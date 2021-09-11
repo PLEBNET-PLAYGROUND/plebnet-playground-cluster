@@ -46,5 +46,5 @@ if [[ ! -f /root/.lnd/lnd.conf ]]; then
 else
   echo "lnd.conf file exists, skipping."
 fi
-cat $(hostname -i) > localhostip
+echo $(hostname -i) > localhostip
 exec "$@"
