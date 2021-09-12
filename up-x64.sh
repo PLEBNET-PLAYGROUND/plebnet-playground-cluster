@@ -7,7 +7,7 @@ fi
 #This is for internal testing only
 declare ARCH=x86_64-linux-gnu
 declare torcount=$(expr $1 / 8 + 1)
-python plebnet_generate.py ARCH=x86_64-linux-gnu bitcoind=$1 lnd=$1 tor=$torcount
+python plebnet_generate.py ARCH=x86_64-linux-gnu bitcoind=$1 clightning=$1 tor=$torcount
 
 #Remove
 docker-compose down 
@@ -19,7 +19,7 @@ mkdir volumes
 declare n=$1
 for (( i=0; i<=n-1; i++ ))
 do
-    mkdir volumes/lnd_datadir_$i
+    mkdir volumes/clightning_datadir_$i
     mkdir volumes/bitcoin_datadir_$i
   
 #    mkdir volumes/tor_torrcdir_1

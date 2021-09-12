@@ -24,11 +24,11 @@ services:
       - type: bind
         source: ${oc.env:PWD}/volumes/bitcoin_datadir_${bitcoind_i}
         target: /root/.bitcoin/
-  lnd:
+  clightning:
     build: 
-      context: ./lnd-signet
+      context: ./clightning-signet
       dockerfile: Dockerfile
-    image: playground-cluster-lnd
+    image: playground-clightning
     links:
     - bitcoind-${bitcoind_i}
     - tor-${tor_i}
@@ -37,27 +37,17 @@ services:
     - tor-${tor_i}
     environment:
       ARCH: '${ARCH}'
-      n: '${lnd_i}'
-      LND_LISTEN: 'playground-lnd-${lnd_i}:9735'
-      LND_RPCLISTEN: 'playground-lnd-${lnd_i}:10009'
-      LND_RESTLISTEN: 'playground-lnd-${lnd_i}:8080'
-      zmqpubrawblock: 'tcp://playground-bitcoind-${bitcoind_i}:28332'
-      zmqpubrawtx: 'tcp://playground-bitcoind-${bitcoind_i}:28333'
-      torsocks: 'playground-tor-${tor_i}:9050'
-      torcontrol: 'playground-tor-${tor_i}:9051'
-      tlsextradomain: 'playground-lnd-${lnd_i}'
+      n: '${clightning_i}'      
       rpchost: 'playground-bitcoind-${bitcoind_i}'
     restart: unless-stopped
     container_name: playground-lnd-${lnd_i}
     expose:
-    - 8080
     - 9735
-    - 9911
-    - 10009
+    - 9835
     volumes:
       - type: bind
-        source: ${oc.env:PWD}/volumes/lnd_datadir_${lnd_i}
-        target: /root/.lnd/
+        source: ${oc.env:PWD}/volumes/clightning_datadir_${lnd_i}
+        target: /root/.lightning
   tor:
       restart: unless-stopped
       build:
