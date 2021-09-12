@@ -6,7 +6,8 @@ fi
 
 #This is for internal testing only
 declare ARCH=x86_64-linux-gnu
-python plebnet_generate.py ARCH=x86_64-linux-gnu bitcoind=$1 lnd=$1 tor=1
+declare torcount=$(expr $1 / 8 + 1)
+python plebnet_generate.py ARCH=x86_64-linux-gnu bitcoind=$1 lnd=$1 tor=$torcount
 
 #Remove
 docker-compose down 
@@ -24,7 +25,11 @@ do
     mkdir volumes/tor_servicesdir_$i
 #    mkdir volumes/tor_torrcdir_1
 done
-mkdir volumes/tor_torrcdir_0
+for (( i=0; i<=torcount-1; i++ ))
+do 
+    mkdir volumes/tor_torrcdir_$i
+done
+
 docker-compose build --build-arg ARCH=$ARCH
 docker-compose up -d
 
