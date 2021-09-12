@@ -21,12 +21,13 @@ for (( i=0; i<=n-1; i++ ))
 do
     mkdir volumes/lnd_datadir_$i
     mkdir volumes/bitcoin_datadir_$i
-    mkdir volumes/tor_datadir_$i
-    mkdir volumes/tor_servicesdir_$i
+  
 #    mkdir volumes/tor_torrcdir_1
 done
 for (( i=0; i<=torcount-1; i++ ))
 do 
+    mkdir volumes/tor_datadir_$i
+    mkdir volumes/tor_servicesdir_$i
     mkdir volumes/tor_torrcdir_$i
 done
 
