@@ -59,8 +59,7 @@ def get_service_values(i, node_counts, **kwargs):
         service_values[k] = v
     return OmegaConf.create(service_values)
 
-for service in list(conf.services):
-    service_nodes = node_counts[service]
+for service, service_nodes in node_counts.items():
     print(service, service_nodes)
     for i in range(service_nodes):
         service_values = get_service_values(i, node_counts, ARCH=arch)
@@ -72,6 +71,16 @@ for service in list(conf.services):
         if i > 0:
             conf.services[service_name].pop('build')
     conf.services.pop(service)
+
+dashboard = conf.services.pop('dashboard')
+dashboard.links = []
+for service in 'lnd', 'bitcoind':
+    for i in range(node_counts[service]):
+        dashboard.links.append('{}-{}'.format(service, i))
+dashboard.depends_on = dashboard.links
+
+conf.services['dashboard'] = dashboard
+
 try:
     OmegaConf.resolve(conf)
 except:

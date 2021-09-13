@@ -100,7 +100,7 @@ else:
     os.environ['GRPC_SSL_CIPHER_SUITES'] = 'HIGH+ECDSA'
     cert = open(LND_DIR+'/tls.cert', 'rb').read()
     ssl_creds = grpc.ssl_channel_credentials(cert)
-    channel = grpc.secure_channel('playground-lnd:10009', ssl_creds)
+    channel = grpc.secure_channel('playground-lnd-0:10009', ssl_creds)
     stub = lightningstub.LightningStub(channel)
     request = lnrpc.ChannelGraphRequest(include_unannounced=True)
     response = stub.DescribeGraph(request, metadata=[('macaroon', macaroon)])
