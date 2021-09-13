@@ -4,12 +4,12 @@ set -eo pipefail
 initial_config_file()
 {
  echo "bitcoin-rpcconnect=${BITCOIN_RPCCONNECT}
-bitcoin-rpcuser=${bitcoin_rpcuser}
-bitcoin-rpcpassword=${bitcoin_rpcpassword}
-alias=${alias}
-proxy=${proxy}
-log-file=${log_file}
-tor-service-password=${tor_service_password}" > /root/.lightning/signet/config
+bitcoin-rpcuser=${BITCOIN_RPCUSER}
+bitcoin-rpcpassword=${BITCOIN_RPCPASSWORD}
+alias=${ALIAS}
+proxy=${PROXY}
+log-file=${LOG_FILE}
+tor-service-password=${TOR_SERVICE_PASSWORD}" > /root/.lightning/signet/config
 } 
 
  mkdir -p /root/.lightning/signet/

@@ -58,12 +58,12 @@ services:
     environment:
       ARCH: '${ARCH}' 
       BITCOIN_RPCCONNECT: playground-bitcoind-clnd
-      bitcoin_rpcuser: bitcoin
-      bitcoin_rpcpassword: bitcoin
-      alias: clightning-test
-      proxy: playground-tor-clnd
-      log_file: /root/.lightning/logs.log
-      tor_service_password: hello
+      BITCOIN_RPCUSER: bitcoin
+      BITCOIN_RPCPASSWORD: bitcoin
+      ALIAS: clightning-test
+      PROXY: playground-tor-clnd
+      LOG_FILE: /root/.lightning/logs.log
+      TOR_SERVICE_PASSWORD: hello
     restart: unless-stopped
     container_name: playground-clnd
     expose:
