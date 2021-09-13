@@ -78,4 +78,36 @@ services:
         - type: bind
           source: ${oc.env:PWD}/volumes/tor_servicesdir_${tor_i}
           target: /var/lib/tor/hidden_services
-
+  dashboard:
+    container_name: playground-cluster-dashboard
+    links: 
+      - lnd-${lnd_i}     
+      - bitcoind-${bitcoind_i} 
+    depends_on: 
+      - lnd
+      - bitcoind
+    restart: unless-stopped
+    ports:
+      - "8888:8888"
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ${PWD}/dashboard
+        target: /dashboard
+      - type: bind
+        source: ${PWD}/volumes/lnd_datadir
+        target: /root/.lnd/
+        read_only: true
+    environment:
+      JUPYTER_NOTEBOOKS: /dashboard
+      JUPYTER_PORT: 8888
+      LND_DATADIR: /root/.lnd
+      GRAPH_TEST_DATA: describegraph.json
+      USE_TEST_DATA: ${USE_TEST_DATA}
+    working_dir: /dashboard
+    command:
+      - sh
+      - -c
+      - chmod +x /dashboard/jupyter_run.sh && /dashboard/jupyter_run.sh
