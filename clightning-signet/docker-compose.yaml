@@ -57,13 +57,13 @@ services:
     - tor-0
     environment:
       ARCH: '${ARCH}' 
-      BITCOIN-RPCCONNECT: playground-bitcoind-clnd
-      bitcoin-rpcuser: bitcoin
-      bitcoin-rpcpassword: bitcoin
+      BITCOIN_RPCCONNECT: playground-bitcoind-clnd
+      bitcoin_rpcuser: bitcoin
+      bitcoin_rpcpassword: bitcoin
       alias: clightning-test
       proxy: playground-tor-clnd
-      log-file: /root/.lightning/logs.log
-      tor-service-password: hello
+      log_file: /root/.lightning/logs.log
+      tor_service_password: hello
     restart: unless-stopped
     container_name: playground-clnd
     expose:
