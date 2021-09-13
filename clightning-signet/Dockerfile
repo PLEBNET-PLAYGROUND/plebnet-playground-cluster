@@ -89,4 +89,4 @@ COPY docker-entrypoint.sh entrypoint.sh
 
 EXPOSE 9735 9835
 ENTRYPOINT  [ "/usr/bin/tini", "-g", "--", "./entrypoint.sh" ]
-CMD ["lightningd","--network=bitcoin"]
+CMD ["lightningd","--network=signet"]

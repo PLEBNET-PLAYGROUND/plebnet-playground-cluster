@@ -362,5 +362,4 @@ z.sh
 
 volumes/
 backup/
-docker-compose.yaml
-
+/docker-compose.yaml

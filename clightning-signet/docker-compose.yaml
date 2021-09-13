@@ -1,0 +1,78 @@
+version: '3'
+networks: {}
+services:
+  bitcoind-0:
+    build:
+      context: ../bitcoin-signet
+      dockerfile: Dockerfile
+      args:
+      - ARCH=x86_64-linux-gnu
+    image: playground-cluster-bitcoind
+    links:
+    - tor-0
+    depends_on:
+    - tor-0
+    restart: unless-stopped
+    container_name: playground-bitcoind-clnd
+    environment:
+    - ARCH=x86_64-linux-gnu
+    expose:
+    - '38332'
+    - '38333'
+    - '38334'
+    volumes:
+    - type: bind
+      source: ./bitcoin_datadir_0
+      target: /root/.bitcoin/
+  tor-0:
+    restart: unless-stopped
+    build:
+      context: ../tor
+      dockerfile: Dockerfile
+    image: playground-cluster-tor
+    container_name: playground-tor-clnd
+    expose:
+    - 9050
+    - 9051
+    volumes:
+    - type: bind
+      source: ./tor_datadir_0
+      target: /home/tor/.tor
+    - type: bind
+      source: ./tor_torrcdir_0
+      target: /usr/local/etc/tor
+    - type: bind
+      source: ./tor_servicesdir_0
+      target: /var/lib/tor/hidden_services
+  clightning:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: playground-clightning
+    links:
+    - bitcoind-0
+    - tor-0
+    depends_on: 
+    - bitcoind-0
+    - tor-0
+    environment:
+      ARCH: '${ARCH}' 
+      BITCOIN-RPCCONNECT: playground-bitcoind-clnd
+      bitcoin-rpcuser: bitcoin
+      bitcoin-rpcpassword: bitcoin
+      alias: clightning-test
+      proxy: playground-tor-clnd
+      log-file: /root/.lightning/logs.log
+      tor-service-password: hello
+    restart: unless-stopped
+    container_name: playground-clnd
+    expose:
+    - 9735
+    - 9835
+    volumes:
+      - type: bind
+        source: ./clightning_datadir_0
+        target: /root/.lightning
+      - type: bind
+        source: ./bitcoin_datadir_0
+        target: /root/.bitcoin/
