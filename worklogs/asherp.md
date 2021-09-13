@@ -1,3 +1,6 @@
+
+### 2021-09-13 00:20:29.997100: clock-in: T-10m 
+
 ### 2021-09-08 16:18:25.678676: clock-out
 
 * usage and clarification on node linkage
