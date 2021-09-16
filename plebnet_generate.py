@@ -69,8 +69,8 @@ for service in list(conf.services):
             service_values,
             conf.services[service])
         # remove build for additional nodes
-        if i > 0:
-            conf.services[service_name].pop('build')
+       # if i > 0:
+       #     conf.services[service_name].pop('build')
     conf.services.pop(service)
 try:
     OmegaConf.resolve(conf)
