@@ -4,7 +4,7 @@
 : ${lnd=10}
 : ${tor=10}
 
-python plebnet_generate.py ARCH=$ARCH bitcoind=$bitcoind lnd=$lnd tor=$tor
+./plebnet_generate.py ARCH=$ARCH bitcoind=$bitcoind lnd=$lnd tor=$tor
 
 #Remove
 docker-compose down
