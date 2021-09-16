@@ -1,32 +1,32 @@
 #This is for internal testing only
 : ${ARCH:=x86_64-linux-gnu}
-: ${bitcoind=1}
-: ${lnd=1}
-: ${tor=1}
+: ${bitcoind=10}
+: ${lnd=10}
+: ${tor=10}
 
 python plebnet_generate.py ARCH=$ARCH bitcoind=$bitcoind lnd=$lnd tor=$tor
 
 #Remove
-docker-compose down 
+docker-compose down
 sudo rm -rf volumes
 
 
 #Create Datafile
 
 mkdir volumes
-for (( i=0; i<=$bitcoind-1; i++ ))
+for (( i=0; i<=$bitcoind; i++ ))
 do
     mkdir volumes/bitcoin_datadir_$i
 done
-for (( i=0; i<=$lnd-1; i++ ))
+for (( i=0; i<=$lnd; i++ ))
 do
     mkdir volumes/lnd_datadir_$i
 done
-for (( i=0; i<=$tor-1; i++ ))
+for (( i=0; i<=$tor; i++ ))
 do
-    mkdir volumes/tor_datadir_$i
-    mkdir volumes/tor_servicesdir_$i
-    mkdir volumes/tor_torrcdir_$i
+    mkdir -p volumes/tor_datadir_$i
+    mkdir -p volumes/tor_servicesdir_$i
+    mkdir -p volumes/tor_torrcdir_$i
 done
 
 docker-compose build --build-arg ARCH=$ARCH
