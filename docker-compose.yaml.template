@@ -25,10 +25,7 @@ services:
         source: ${oc.env:PWD}/volumes/bitcoin_datadir_${bitcoind_i}
         target: /root/.bitcoin/
   lnd:
-    build: 
-      context: ./lnd-signet
-      dockerfile: Dockerfile
-    image: playground-cluster-lnd
+    image: ghcr.io/plebnet-playground/playground-lnd:latest
     links:
     - bitcoind-${bitcoind_i}
     - tor-${tor_i}
@@ -60,10 +57,7 @@ services:
         target: /root/.lnd/
   tor:
       restart: unless-stopped
-      build:
-        context: ./tor
-        dockerfile: Dockerfile
-      image: playground-cluster-tor
+      image: ghcr.io/plebnet-playground/playground-tor:latest
       container_name: playground-tor-${tor_i}
       environment:
         TRIPLET: '${TRIPLET}'
