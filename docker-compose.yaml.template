@@ -1,4 +1,4 @@
-version: "3"
+version: "3.4"
 networks: {}
 services:
   bitcoind:
@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
       args:
         - ARCH=${ARCH}
-    image: playground-cluster-bitcoind
+    image: ghcr.io/randymcmillan/plebnet-playground-docker/bitcoind-${ARCH}/root
     links:
     - tor-${tor_i}
     depends_on: 
@@ -28,7 +28,7 @@ services:
     build: 
       context: ./lnd-signet
       dockerfile: Dockerfile
-    image: playground-cluster-lnd
+    image: ghcr.io/randymcmillan/plebnet-playground-docker/lnd-${ARCH}/root
     links:
     - bitcoind-${bitcoind_i}
     - tor-${tor_i}
@@ -63,7 +63,7 @@ services:
       build:
         context: ./tor
         dockerfile: Dockerfile
-      image: playground-cluster-tor
+      image: ghcr.io/randymcmillan/plebnet-playground-docker/tor-${ARCH}/root
       container_name: playground-tor-${tor_i}
       expose:
       - 9050
