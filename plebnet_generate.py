@@ -74,11 +74,15 @@ for service, service_nodes in node_counts.items():
 
 dashboard = conf.services.pop('dashboard')
 dashboard.links = []
+dashboard.volumes = []
+dashboard.volumes.append(OmegaConf.create({"type" : "bind", "source": f'${{oc.env:PWD}}/dashboard',"target":"/dashboard"}))
 for service in 'lnd', 'bitcoind':
     for i in range(node_counts[service]):
         dashboard.links.append('{}-{}'.format(service, i))
 dashboard.depends_on = dashboard.links
-
+for i in range(node_counts['lnd']):
+    lnd_conf = OmegaConf.create({"type" : "bind", "source": f'${{oc.env:PWD}}/volumes/lnd_datadir_{i}',"target":f'/root/.lnd/{i}/',"read_only":"true"})
+    dashboard.volumes.append(lnd_conf)
 conf.services['dashboard'] = dashboard
 
 try:

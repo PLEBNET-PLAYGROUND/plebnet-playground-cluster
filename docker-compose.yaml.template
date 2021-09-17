@@ -88,7 +88,7 @@ services:
     #   - bitcoind
     restart: unless-stopped
     ports:
-      - "8050:8050"
+      - "8888:8888"
     build:
       context: ./dashboard
       dockerfile: Dockerfile
@@ -107,8 +107,4 @@ services:
       GRAPH_TEST_DATA: describegraph.json
       USE_TEST_DATA: ${oc.env:USE_TEST_DATA, False}
     working_dir: /dashboard
-    # use this command to spin up jupyter serving on localhost:8888
-    command:
-      - python
-      - dashboard.py
 
