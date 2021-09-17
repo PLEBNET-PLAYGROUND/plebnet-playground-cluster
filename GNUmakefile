@@ -238,6 +238,10 @@ endif
 install: init
 	bash -c './up-generic.sh $(ARCH)'
 #######################
+.PHONY: uninstall
+uninstall:
+	bash -c './uninstall.sh $(ARCH)'
+#######################
 .PHONY: run
 run: init
 	$(DOCKER_COMPOSE) $(VERBOSE) $(NOCACHE) up --remove-orphans &
