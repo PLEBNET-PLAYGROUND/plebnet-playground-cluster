@@ -1,5 +1,13 @@
 #This is for internal testing only
-: ${ARCH:=$(uname -m)-linux-gnu}
+SYSTEM_ARCH=$(uname -m)
+if [ "$SYSTEM_ARCH" = arm64 ]; then
+    ARCH=aarch64-linux-gnu
+fi
+if [ "$SYSTEM_ARCH" = x86_86 ]; then
+    ARCH=x86_64-linux-gnu
+fi
+
+: ${ARCH:=$ARCH}
 : ${bitcoind=10}
 : ${lnd=10}
 : ${tor=10}
