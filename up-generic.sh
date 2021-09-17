@@ -1,5 +1,5 @@
 #This is for internal testing only
-: ${ARCH:=x86_64-linux-gnu}
+: ${ARCH:=$(uname -m)-linux-gnu}
 : ${bitcoind=10}
 : ${lnd=10}
 : ${tor=10}
