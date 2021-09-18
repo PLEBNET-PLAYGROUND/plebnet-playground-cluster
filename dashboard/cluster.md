@@ -15,26 +15,32 @@ import os
 import grpc
 import lightning_pb2 as lnrpc
 import lightning_pb2_grpc as lightningstub
-macaroon = codecs.encode(open('/root/.lnd/0/data/chain/bitcoin/signet/admin.macaroon', 'rb').read(), 'hex')
-os.environ['GRPC_SSL_CIPHER_SUITES'] = 'HIGH+ECDSA'
-cert = open('/root/.lnd/0/tls.cert', 'rb').read()
-ssl_creds = grpc.ssl_channel_credentials(cert)
-channel = grpc.secure_channel('playground-lnd-0:10009', ssl_creds)
-stub = lightningstub.LightningStub(channel)
+
+def ConnectToNode(node_number):
+    macaroon = codecs.encode(open(f'/root/.lnd/{node_number}/data/chain/bitcoin/signet/admin.macaroon', 'rb').read(), 'hex')
+    os.environ['GRPC_SSL_CIPHER_SUITES'] = 'HIGH+ECDSA'
+    cert = open(f'/root/.lnd/{node_number}/tls.cert', 'rb').read()
+    ssl_creds = grpc.ssl_channel_credentials(cert)
+    channel = grpc.secure_channel(f'playground-lnd-{node_number}:10009', ssl_creds)
+    stub = lightningstub.LightningStub(channel)
+    return stub,macaroon
+    
+  
+```
+
+```python
+for x in range(25):
+    print(x)
+    stub, macaroon = ConnectToNode(0)
+    
+```
+
+```python
+stub, macaroon = ConnectToNode(0)
 request = lnrpc.ChannelGraphRequest(include_unannounced=True)
 response = stub.DescribeGraph(request, metadata=[('macaroon', macaroon)])
-
+stub.D
 ```
-
-<!-- #region -->
-Response is a object containing:
-```python
-# { 
-#     "nodes": <array LightningNode>,
-#     "edges": <array ChannelEdge>,
-# }
-```
-<!-- #endregion -->
 
 ## nodes
 
