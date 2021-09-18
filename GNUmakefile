@@ -171,6 +171,8 @@ help:
 	@echo ''
 	@echo '	[USAGE]: make [COMMAND] [EXTRA_ARGUMENTS]	'
 	@echo ''
+	@echo '		 make init'
+	@echo '		 make install'
 	@echo '		 make run'
 
 .PHONY: report
@@ -249,17 +251,20 @@ run: init
 .PHONY: clean
 clean:
 	# remove created images
+	@bash -c "echo $(PROJECT_NAME)"
 	@$(DOCKER_COMPOSE) -p $(PROJECT_NAME) down --remove-orphans --rmi all 2>/dev/null \
 	&& echo 'Image(s) for "$(PROJECT_NAME)" removed.' \
 	|| echo 'Image(s) for "$(PROJECT_NAME)" already removed.'
 #######################
 .PHONY: prune
 prune:
+	@bash -c "echo $(PROJECT_NAME)"
 	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) down
 	docker system prune -af
 #######################
 .PHONY: prune-network
 prune-network:
+	@bash -c "echo $(PROJECT_NAME)"
 	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) down
 	docker network prune -f
 #######################

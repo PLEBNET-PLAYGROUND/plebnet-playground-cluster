@@ -1,16 +1,32 @@
 #This is for internal testing only
-SYSTEM_ARCH=$(uname -m)
-if [ "$SYSTEM_ARCH" = arm64 ]; then
-    ARCH=aarch64-linux-gnu
-fi
-if [ "$SYSTEM_ARCH" = x86_86 ]; then
-    ARCH=x86_64-linux-gnu
+if [[ $# -ne 1 ]];
+then
+    echo "up-generic.sh (# of instances)"
+    exit
 fi
 
+SYSTEM_ARCH=$(uname -m)
+export SYSTEM_ARCH
+case $SYSTEM_ARCH in
+
+  x86_64)
+    echo -n "$SYSTEM_ARCH"
+    ARCH=x86_64-linux-gnu
+    echo
+    ;;
+
+  arm64 | aarch64)
+    echo -n "$SYSTEM_ARCH"
+    ARCH=aarch64-linux-gnu
+    echo
+    ;;
+esac
+export ARCH
+
 : ${ARCH:=$ARCH}
-: ${bitcoind=10}
-: ${lnd=10}
-: ${tor=10}
+: ${bitcoind=$1}
+: ${lnd=$1}
+: ${tor=$1}
 
 ./plebnet_generate.py ARCH=$ARCH bitcoind=$bitcoind lnd=$lnd tor=$tor
 
