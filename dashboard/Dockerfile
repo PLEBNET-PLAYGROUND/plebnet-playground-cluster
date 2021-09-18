@@ -16,7 +16,18 @@ WORKDIR /grpc
 
 RUN git clone https://github.com/googleapis/googleapis.git
 RUN wget https://raw.githubusercontent.com/lightningnetwork/lnd/master/lnrpc/lightning.proto
+RUN wget https://raw.githubusercontent.com/lightningnetwork/lnd/master/lnrpc/chainrpc/chainnotifier.proto
+RUN wget https://raw.githubusercontent.com/lightningnetwork/lnd/master/lnrpc/invoicesrpc/invoices.proto
+RUN wget https://raw.githubusercontent.com/lightningnetwork/lnd/master/lnrpc/routerrpc/router.proto
+RUN wget https://raw.githubusercontent.com/lightningnetwork/lnd/master/lnrpc/watchtowerrpc/watchtower.proto
+RUN wget https://raw.githubusercontent.com/lightningnetwork/lnd/master/lnrpc/wtclientrpc/wtclient.proto
+RUN wget https://raw.githubusercontent.com/lightningnetwork/lnd/master/lnrpc/signrpc/signer.proto
 RUN python -m grpc_tools.protoc --proto_path=googleapis:. --python_out=. --grpc_python_out=. lightning.proto
+RUN python -m grpc_tools.protoc --proto_path=googleapis:. --python_out=. --grpc_python_out=. chainnotifier.proto
+RUN python -m grpc_tools.protoc --proto_path=googleapis:. --python_out=. --grpc_python_out=. invoices.proto
+RUN python -m grpc_tools.protoc --proto_path=googleapis:. --python_out=. --grpc_python_out=. router.proto
+RUN python -m grpc_tools.protoc --proto_path=googleapis:. --python_out=. --grpc_python_out=. watchtower.proto
+RUN python -m grpc_tools.protoc --proto_path=googleapis:. --python_out=. --grpc_python_out=. wtclient.proto
 
 COPY . /dashboard
 
