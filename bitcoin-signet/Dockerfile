@@ -3,7 +3,6 @@ FROM debian:buster-slim as builder
 ARG BITCOIN_VERSION=23.0
 ARG TRIPLET=${TRIPLET}
 
-
 #RUN apt-add-repository ppa:bitcoin/bitcoin && apt-get update && apt-get install bitcoin
 #RUN /lib64/ld-linux-x86-64.so.2 /bin/chmod +x /bin/chmod
 
