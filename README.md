@@ -11,7 +11,7 @@ nodes=1 ./up-x64.sh
 The `up-generic.sh` allows these to be set indpendently:
 
 ```console
-ARCH=aarch64-linux-gnu bitcoind=1 lnd=1 tor=1 ./up-generic.sh
+TRIPLET=aarch64-linux-gnu bitcoind=1 lnd=1 tor=1 ./up-generic.sh
 ```
 
 These services are linked in a round-robin fashion:

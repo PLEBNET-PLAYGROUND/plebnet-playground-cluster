@@ -6,7 +6,7 @@ services:
       context: ./bitcoin-signet
       dockerfile: Dockerfile
       args:
-        - ARCH=${ARCH}
+        - TRIPLET=${TRIPLET}
     image: playground-cluster-bitcoind
     links:
     - tor-${tor_i}
@@ -15,7 +15,7 @@ services:
     restart: unless-stopped
     container_name: playground-bitcoind-${bitcoind_i}
     environment:
-      - ARCH=${ARCH}
+      - TRIPLET=${TRIPLET}
     expose:
     - "38332"
     - "38333"
@@ -36,7 +36,7 @@ services:
     - bitcoind-${bitcoind_i}
     - tor-${tor_i}
     environment:
-      ARCH: '${ARCH}'
+      TRIPLET: '${TRIPLET}'
       n: '${lnd_i}'
       LND_LISTEN: 'playground-lnd-${lnd_i}:9735'
       LND_RPCLISTEN: 'playground-lnd-${lnd_i}:10009'

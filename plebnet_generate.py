@@ -17,11 +17,11 @@ from omegaconf import OmegaConf
 cli_args = OmegaConf.from_cli()
 
 try:
-    arch = cli_args['ARCH']
+    triplet = cli_args['TRIPLET']
 except KeyError:
-    print('Need to supply ARCH. Supported architectures:')
+    print('Need to supply TRIPLET. Supported architectures:')
     for k, v in architectures.items():
-        print('\t{}: ARCH={}'.format(k, v))
+        print('\t{}: TRIPLET={}'.format(k, v))
     sys.exit()
 
 node_counts = dict()
@@ -36,7 +36,7 @@ for _ in 'bitcoind', 'lnd', 'tor':
 conf = OmegaConf.load('docker-compose.yaml.template')
 
 # merge in architecture
-conf = OmegaConf.merge(OmegaConf.create(dict(ARCH=arch)), conf)
+conf = OmegaConf.merge(OmegaConf.create(dict(TRIPLET=triplet)), conf)
 
 print('creating config for nodes:')
 
@@ -63,7 +63,7 @@ for service in list(conf.services):
     service_nodes = node_counts[service]
     print(service, service_nodes)
     for i in range(service_nodes):
-        service_values = get_service_values(i, node_counts, ARCH=arch)
+        service_values = get_service_values(i, node_counts, TRIPLET=triplet)
         service_name = '{}-{}'.format(service, str(i))
         conf.services[service_name] = get_service(
             service_values,
@@ -77,7 +77,7 @@ try:
 except:
     print(OmegaConf.to_yaml(conf))
     raise
-conf.pop('ARCH')
+conf.pop('TRIPLET')
 
 with open('docker-compose.yaml', 'w') as f:
     f.write(OmegaConf.to_yaml(conf))
