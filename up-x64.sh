@@ -18,9 +18,8 @@ while ! docker system info > /dev/null 2>&1; do
 done
 
 #This is for internal testing only
-TRIPLET=x86_64-linux-gnu
-torcount=`expr $1 / 3 + 1`
-echo $torcount
+declare TRIPLET=x86_64-linux-gnu
+declare torcount=$(expr $1 / 8 + 1)
 python plebnet_generate.py TRIPLET=x86_64-linux-gnu bitcoind=$1 lnd=$1 tor=$torcount
 
 #Remove
@@ -64,5 +63,4 @@ done
 
 docker compose build --parallel --build-arg TRIPLET=$TRIPLET || docker-compose build --parallel --build-arg TRIPLET=$TRIPLET
 docker compose up --remove-orphans -d || docker-compose up --remove-orphans -d
-
 
