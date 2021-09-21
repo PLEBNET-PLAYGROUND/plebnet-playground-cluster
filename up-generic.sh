@@ -1,10 +1,10 @@
 #This is for internal testing only
-: ${ARCH:=x86_64-linux-gnu}
+: ${TRIPLET:=x86_64-linux-gnu}
 : ${bitcoind=1}
 : ${lnd=1}
 : ${tor=1}
 
-python plebnet_generate.py ARCH=$ARCH bitcoind=$bitcoind lnd=$lnd tor=$tor
+python plebnet_generate.py TRIPLET=$TRIPLET bitcoind=$bitcoind lnd=$lnd tor=$tor
 
 #Remove
 docker-compose down 
@@ -29,6 +29,6 @@ do
     mkdir volumes/tor_torrcdir_$i
 done
 
-docker-compose build --build-arg ARCH=$ARCH
+docker-compose build --build-arg TRIPLET=$TRIPLET
 docker-compose up --remove-orphans -d
 

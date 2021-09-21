@@ -5,9 +5,9 @@ then
 fi
 
 #This is for internal testing only
-declare ARCH=x86_64-linux-gnu
+declare TRIPLET=x86_64-linux-gnu
 declare torcount=$(expr $1 / 8 + 1)
-python plebnet_generate.py ARCH=x86_64-linux-gnu bitcoind=$1 lnd=$1 tor=$torcount
+python plebnet_generate.py TRIPLET=x86_64-linux-gnu bitcoind=$1 lnd=$1 tor=$torcount
 
 #Remove
 docker-compose down 
@@ -31,7 +31,7 @@ do
     mkdir volumes/tor_torrcdir_$i
 done
 
-docker-compose build --build-arg ARCH=$ARCH
+docker-compose build --build-arg TRIPLET=$TRIPLET
 docker-compose up -d
 
  
