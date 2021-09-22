@@ -3,7 +3,7 @@
 
 FROM alpine:3.13 AS tor-build
 ARG TOR_GPG_KEY=0x6AFEE6D49E92B601
-ENV TOR_VERSION=0.4.6.5
+ENV TOR_VERSION=0.4.6.7
 # Install prerequisites
 RUN apk --no-cache add --update \
         gnupg \
