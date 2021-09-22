@@ -43,7 +43,14 @@ initial_lnd_file()
 if [[ ! -f /root/.lnd/lnd.conf ]]; then
   echo "lnd.conf file not found in volume, building."
   initial_lnd_file
-  /usr/local/etc/docker-initwalletcreate.sh &
+  if [[ ! -f /root/.lnd/data/chain/bitcoin/signet/wallet.db ]]; then
+    echo "wallet.db file not found in volume, building."
+    /usr/local/etc/docker-initwalletcreate.sh &
+  else
+    echo "wallet.db EXISTS, make unlocker"
+    echo "12345678" > /root/.lnd/unlock.password
+    echo "wallet-unlock-password-file=/root/.lnd/unlock.password" >> /root/.lnd/lnd.conf
+  fi
 else
   echo "lnd.conf file exists, skipping."
 fi

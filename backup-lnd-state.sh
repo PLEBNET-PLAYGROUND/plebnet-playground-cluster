@@ -10,4 +10,5 @@ do
     sudo cp -v ${f}/* ./backup/${num}/config 
     sudo cp -v ${f}/data/chain/bitcoin/signet/* ./backup/${num}/chain
     sudo cp -v ${f}/data/graph/signet/* ./backup/${num}/graph
+    sudo rm -v ./backup/${num}/config/lnd.conf #remove this because it will cause issues on restore
 done
