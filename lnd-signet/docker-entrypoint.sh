@@ -50,6 +50,7 @@ if [[ ! -f /root/.lnd/lnd.conf ]]; then
     echo "wallet.db EXISTS, make unlocker"
     echo "12345678" > /root/.lnd/unlock.password
     echo "wallet-unlock-password-file=/root/.lnd/unlock.password" >> /root/.lnd/lnd.conf
+    /usr/local/etc/docker-fixmissingalias.sh &
   fi
 else
   echo "lnd.conf file exists, skipping."

@@ -52,7 +52,7 @@ RUN sha256sum /bin/lnd /bin/lncli > /shasums.txt
 
 COPY docker-entrypoint.sh /usr/local/etc/entrypoint.sh
 COPY docker-initwalletcreate.sh /usr/local/etc/docker-initwalletcreate.sh
-
+COPY docker-fixmissingalias.sh /usr/local/etc/docker-fixmissingalias.sh
 ENTRYPOINT ["/usr/local/etc/entrypoint.sh"]
 
 # Specify the start command and entrypoint as the lnd daemon.
