@@ -3,9 +3,9 @@
 This package will setup a set of bitcoind, lnd, and tor docker containers so someone can spin up many nodes in order to help simulate natural traffic thru the playground network. 
 
 
-On linux:
+On linux (for 3 nodes:
 ```console
-nodes=1 ./up-x64.sh
+./up-x64.sh 3
 ```
 
 The `up-generic.sh` allows these to be set indpendently:
