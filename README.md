@@ -5,12 +5,14 @@ This package will setup a set of bitcoind, lnd, and tor docker containers so som
 
 On linux (for 3 nodes:
 ```console
+pip3 install -r requirements.txt
 ./up-x64.sh 3
 ```
 
 The `up-generic.sh` allows these to be set indpendently:
 
 ```console
+pip3 install -r requirements.txt
 TRIPLET=aarch64-linux-gnu bitcoind=1 lnd=1 tor=1 ./up-generic.sh
 ```
 
