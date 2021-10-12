@@ -34,6 +34,9 @@ initial_lnd_file()
     tor.password=hello
     tor.v3=true
     tor.skip-proxy-for-clearnet-targets=true
+    gc-canceled-invoices-on-startup=1
+    gc-canceled-invoices-on-the-fly=1
+    db.bolt.auto-compact=true
     protocol.wumbo-channels=true
     " >> /root/.lnd/lnd.conf
 }
