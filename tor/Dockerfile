@@ -4,6 +4,7 @@
 FROM alpine:3.13 AS tor-build
 ARG TOR_GPG_KEY=0x6AFEE6D49E92B601
 ENV TOR_VERSION=0.4.6.7
+ARG TRIPLET=${TRIPLET}
 # Install prerequisites
 RUN apk --no-cache add --update \
         gnupg \
@@ -56,6 +57,7 @@ RUN apk --no-cache add --update \
 WORKDIR /tmp/bin
 RUN wget -qO gosu "https://github.com/tianon/gosu/releases/download/1.13/gosu-amd64" \
 	&& echo "6f333f520d31e212634c0777213a5d4f8f26bba1ab4b0edbbdf3c8bff8896ecf  gosu" | sha256sum -c -
+  
 
 FROM alpine:3.13 as playground-tor
 
@@ -64,7 +66,7 @@ LABEL org.opencontainers.image.licenses=MIT
 LABEL org.opencontainers.image.source="https://github.com/PLEBNET-PLAYGROUND/plebnet-playground-docker"
 
 
-ENV TOR_VERSION=0.4.6.5
+ENV TOR_VERSION=0.4.6.7
 
 # Installing dependencies of Tor
 RUN apk --no-cache add --update \

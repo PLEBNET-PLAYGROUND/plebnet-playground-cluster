@@ -65,6 +65,8 @@ services:
         dockerfile: Dockerfile
       image: playground-cluster-tor
       container_name: playground-tor-${tor_i}
+      environment:
+        TRIPLET: '${TRIPLET}'
       expose:
       - 9050
       - 9051
