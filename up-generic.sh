@@ -16,17 +16,18 @@ sudo rm -rf volumes
 mkdir volumes
 for (( i=0; i<=$bitcoind-1; i++ ))
 do
-    mkdir volumes/bitcoin_datadir_$i
+    mkdir -p volumes/bitcoin_datadir_$i
 done
 for (( i=0; i<=$lnd-1; i++ ))
 do
-    mkdir volumes/lnd_datadir_$i
+    mkdir -p volumes/lnd_datadir_$i
 done
+rm -rf   volumes/tor_*dir_*
 for (( i=0; i<=$tor-1; i++ ))
 do
-    mkdir volumes/tor_datadir_$i
-    mkdir volumes/tor_servicesdir_$i
-    mkdir volumes/tor_torrcdir_$i
+    mkdir -p volumes/tor_datadir_$i
+    mkdir -p volumes/tor_servicesdir_$i
+    mkdir -p volumes/tor_torrcdir_$i
 done
 
 docker-compose build --build-arg TRIPLET=$TRIPLET

@@ -1,9 +1,20 @@
-# Generates docker-compose for n nodes.
+#!/usr/bin/env python3
+# Generates docker-compose from command line.
+#
+# For each service identified at command line, this we identify other dependent services and add them to the config.
 
 # +
-from omegaconf import OmegaConf
 import sys
 
+sys.path.append('.')
+sys.path.append("/usr/local/lib/python3.7/site-packages")
+sys.path.append("/usr/local/lib/python3.8/site-packages")
+sys.path.append("/usr/local/lib/python3.9/site-packages")
+sys.path.append("/usr/local/lib/python3.10/site-packages")
+sys.path.append("/usr/local/lib/python3.11/site-packages")
+#print(sys.path)
+
+from omegaconf import OmegaConf
 
 architectures = {
         "Intel x64": 'x86_64-linux-gnu',
@@ -12,8 +23,7 @@ architectures = {
         'ARM64 linux': 'aarch64-linux-gnu',
 }
 
-from omegaconf import OmegaConf
-
+# +
 cli_args = OmegaConf.from_cli()
 
 try:
