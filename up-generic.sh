@@ -1,12 +1,9 @@
-#!/usr/bin/env bash
-source ../.venv/bin/activate
-#This is for internal testing only
 : ${TRIPLET:=x86_64-linux-gnu}
-: ${bitcoind=1}
+: ${bitcoind=5}
 : ${lnd=1}
 : ${tor=1}
 
-python plebnet_generate.py TRIPLET=$TRIPLET bitcoind=$bitcoind lnd=$lnd tor=$tor
+$(which python3) plebnet_generate.py TRIPLET=$TRIPLET bitcoind=$bitcoind lnd=$lnd tor=$tor
 
 #Remove
 docker-compose down 
