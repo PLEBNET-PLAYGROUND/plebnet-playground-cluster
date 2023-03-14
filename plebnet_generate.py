@@ -72,7 +72,10 @@ def get_service_values(i, node_counts, **kwargs):
 for service in list(conf.services):
     service_nodes = node_counts[service]
     print(service, service_nodes)
-    for i in range(service_nodes):
+    # print(type(service))
+    # print(type(service_nodes))
+    int_node_count = int(service_nodes)
+    for i in range(int_node_count):
         service_values = get_service_values(i, node_counts, TRIPLET=triplet)
         service_name = '{}-{}'.format(service, str(i))
         conf.services[service_name] = get_service(
