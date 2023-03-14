@@ -363,4 +363,4 @@ z.sh
 volumes/
 backup/
 docker-compose.yaml
-
+.venv
