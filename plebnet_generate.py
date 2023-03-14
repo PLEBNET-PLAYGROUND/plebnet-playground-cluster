@@ -1,9 +1,20 @@
-# Generates docker-compose for n nodes.
+#!/usr/bin/env python3
+# Generates docker-compose from command line.
+#
+# For each service identified at command line, this we identify other dependent services and add them to the config.
 
 # +
-from omegaconf import OmegaConf
 import sys
 
+sys.path.append('.')
+sys.path.append("/usr/local/lib/python3.7/site-packages")
+sys.path.append("/usr/local/lib/python3.8/site-packages")
+sys.path.append("/usr/local/lib/python3.9/site-packages")
+sys.path.append("/usr/local/lib/python3.10/site-packages")
+sys.path.append("/usr/local/lib/python3.11/site-packages")
+#print(sys.path)
+
+from omegaconf import OmegaConf
 
 architectures = {
         "Intel x64": 'x86_64-linux-gnu',
@@ -12,8 +23,7 @@ architectures = {
         'ARM64 linux': 'aarch64-linux-gnu',
 }
 
-from omegaconf import OmegaConf
-
+# +
 cli_args = OmegaConf.from_cli()
 
 try:
@@ -62,7 +72,10 @@ def get_service_values(i, node_counts, **kwargs):
 for service in list(conf.services):
     service_nodes = node_counts[service]
     print(service, service_nodes)
-    for i in range(service_nodes):
+    # print(type(service))
+    # print(type(service_nodes))
+    int_node_count = int(service_nodes)
+    for i in range(int_node_count):
         service_values = get_service_values(i, node_counts, TRIPLET=triplet)
         service_name = '{}-{}'.format(service, str(i))
         conf.services[service_name] = get_service(
