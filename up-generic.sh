@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+source ../.venv/bin/activate
 #This is for internal testing only
 : ${TRIPLET:=x86_64-linux-gnu}
 : ${bitcoind=1}
