@@ -6,7 +6,7 @@
 $(which python3) plebnet_generate.py TRIPLET=$TRIPLET bitcoind=$bitcoind lnd=$lnd tor=$tor
 
 #Remove
-docker-compose down 
+docker-compose down
 sudo rm -rf volumes
 
 
@@ -29,6 +29,22 @@ do
     mkdir -p volumes/tor_torrcdir_$i
 done
 
+#REF: https://docs.docker.com/engine/install/linux-postinstall
+while ! docker system info > /dev/null 2>&1; do
+    echo "Waiting for docker to start..."
+    if [[ "$(uname -s)" == "Linux" ]]; then
+        systemctl restart docker.service
+    fi
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        open --background -a /./Applications/Docker.app/Contents/MacOS/Docker
+    fi
+
+    sleep 1;
+
+done
+
+ARCH=$(uname -m)
+export ARCH
 docker-compose build --build-arg TRIPLET=$TRIPLET
 docker-compose up --remove-orphans -d
 
