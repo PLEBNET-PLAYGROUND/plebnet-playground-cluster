@@ -1,0 +1,154 @@
+version: '3'
+networks: {}
+services:
+  bitcoind-0:
+    image: ghcr.io/plebnet-playground/plebnet-playground-docker/bitcoind-x86_64-linux-gnu/root:v0.5.12
+    build:
+      context: ./bitcoin-signet
+      dockerfile: Dockerfile
+      args:
+      - TRIPLET=x86_64-linux-gnu
+    links:
+    - tor-0
+    depends_on:
+    - tor-0
+    restart: unless-stopped
+    container_name: playground-bitcoind-0
+    environment:
+    - TRIPLET=x86_64-linux-gnu
+    expose:
+    - '38332'
+    - '38333'
+    - '38334'
+    volumes:
+    - type: bind
+      source: /Users/Shared/PLEBNET-PLAYGROUND/plebnet-playground-docker/cluster/volumes/bitcoin_datadir_0
+      target: /root/.bitcoin/
+  bitcoind-1:
+    image: ghcr.io/plebnet-playground/plebnet-playground-docker/bitcoind-x86_64-linux-gnu/root:v0.5.12
+    links:
+    - tor-0
+    depends_on:
+    - tor-0
+    restart: unless-stopped
+    container_name: playground-bitcoind-1
+    environment:
+    - TRIPLET=x86_64-linux-gnu
+    expose:
+    - '38332'
+    - '38333'
+    - '38334'
+    volumes:
+    - type: bind
+      source: /Users/Shared/PLEBNET-PLAYGROUND/plebnet-playground-docker/cluster/volumes/bitcoin_datadir_1
+      target: /root/.bitcoin/
+  bitcoind-2:
+    image: ghcr.io/plebnet-playground/plebnet-playground-docker/bitcoind-x86_64-linux-gnu/root:v0.5.12
+    links:
+    - tor-0
+    depends_on:
+    - tor-0
+    restart: unless-stopped
+    container_name: playground-bitcoind-2
+    environment:
+    - TRIPLET=x86_64-linux-gnu
+    expose:
+    - '38332'
+    - '38333'
+    - '38334'
+    volumes:
+    - type: bind
+      source: /Users/Shared/PLEBNET-PLAYGROUND/plebnet-playground-docker/cluster/volumes/bitcoin_datadir_2
+      target: /root/.bitcoin/
+  bitcoind-3:
+    image: ghcr.io/plebnet-playground/plebnet-playground-docker/bitcoind-x86_64-linux-gnu/root:v0.5.12
+    links:
+    - tor-0
+    depends_on:
+    - tor-0
+    restart: unless-stopped
+    container_name: playground-bitcoind-3
+    environment:
+    - TRIPLET=x86_64-linux-gnu
+    expose:
+    - '38332'
+    - '38333'
+    - '38334'
+    volumes:
+    - type: bind
+      source: /Users/Shared/PLEBNET-PLAYGROUND/plebnet-playground-docker/cluster/volumes/bitcoin_datadir_3
+      target: /root/.bitcoin/
+  bitcoind-4:
+    image: ghcr.io/plebnet-playground/plebnet-playground-docker/bitcoind-x86_64-linux-gnu/root:v0.5.12
+    links:
+    - tor-0
+    depends_on:
+    - tor-0
+    restart: unless-stopped
+    container_name: playground-bitcoind-4
+    environment:
+    - TRIPLET=x86_64-linux-gnu
+    expose:
+    - '38332'
+    - '38333'
+    - '38334'
+    volumes:
+    - type: bind
+      source: /Users/Shared/PLEBNET-PLAYGROUND/plebnet-playground-docker/cluster/volumes/bitcoin_datadir_4
+      target: /root/.bitcoin/
+  lnd-0:
+    image: ghcr.io/plebnet-playground/plebnet-playground-docker/lnd-x86_64-linux-gnu/root:v0.5.12
+    build:
+      context: ./lnd-signet
+      dockerfile: Dockerfile
+    links:
+    - bitcoind-0
+    - tor-0
+    depends_on:
+    - bitcoind-0
+    - tor-0
+    environment:
+      TRIPLET: x86_64-linux-gnu
+      'n': 0
+      LND_LISTEN: playground-lnd-0:9735
+      LND_RPCLISTEN: playground-lnd-0:10009
+      LND_RESTLISTEN: playground-lnd-0:8080
+      zmqpubrawblock: tcp://playground-bitcoind-0:28332
+      zmqpubrawtx: tcp://playground-bitcoind-0:28333
+      torsocks: playground-tor-0:9050
+      torcontrol: playground-tor-0:9051
+      tlsextradomain: playground-lnd-0
+      rpchost: playground-bitcoind-0
+    restart: unless-stopped
+    container_name: playground-lnd-0
+    expose:
+    - 8080
+    - 9735
+    - 9911
+    - 10009
+    volumes:
+    - type: bind
+      source: /Users/Shared/PLEBNET-PLAYGROUND/plebnet-playground-docker/cluster/volumes/lnd_datadir_0
+      target: /root/.lnd/
+  tor-0:
+    restart: unless-stopped
+    image: ghcr.io/plebnet-playground/plebnet-playground-docker/tor-x86_64-linux-gnu/root:v0.5.12
+    build:
+      context: ./tor
+      dockerfile: Dockerfile
+    container_name: playground-tor-0
+    environment:
+      TRIPLET: x86_64-linux-gnu
+    expose:
+    - 9050
+    - 9051
+    volumes:
+    - type: bind
+      source: /Users/Shared/PLEBNET-PLAYGROUND/plebnet-playground-docker/cluster/volumes/tor_datadir_0
+      target: /home/tor/.tor
+    - type: bind
+      source: /Users/Shared/PLEBNET-PLAYGROUND/plebnet-playground-docker/cluster/volumes/tor_torrcdir_0
+      target: /usr/local/etc/tor
+    - type: bind
+      source: /Users/Shared/PLEBNET-PLAYGROUND/plebnet-playground-docker/cluster/volumes/tor_servicesdir_0
+      target: /var/lib/tor/hidden_services
