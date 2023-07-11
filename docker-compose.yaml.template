@@ -2,12 +2,12 @@ version: "3"
 networks: {}
 services:
   bitcoind:
+    image: ghcr.io/plebnet-playground/plebnet-playground-docker/bitcoind-${TRIPLET}/root:v0.5.12
     build:
       context: ./bitcoin-signet
       dockerfile: Dockerfile
       args:
         - TRIPLET=${TRIPLET}
-    image: playground-cluster-bitcoind
     links:
     - tor-${tor_i}
     depends_on: 
@@ -25,10 +25,10 @@ services:
         source: ${oc.env:PWD}/volumes/bitcoin_datadir_${bitcoind_i}
         target: /root/.bitcoin/
   lnd:
-    build: 
+    image: ghcr.io/plebnet-playground/plebnet-playground-docker/lnd-${TRIPLET}/root:v0.5.12
+    build:
       context: ./lnd-signet
       dockerfile: Dockerfile
-    image: playground-cluster-lnd
     links:
     - bitcoind-${bitcoind_i}
     - tor-${tor_i}
@@ -60,10 +60,10 @@ services:
         target: /root/.lnd/
   tor:
       restart: unless-stopped
+      image: ghcr.io/plebnet-playground/plebnet-playground-docker/tor-${TRIPLET}/root:v0.5.12
       build:
         context: ./tor
         dockerfile: Dockerfile
-      image: playground-cluster-tor
       container_name: playground-tor-${tor_i}
       environment:
         TRIPLET: '${TRIPLET}'
